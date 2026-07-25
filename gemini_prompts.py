@@ -6,14 +6,17 @@ Created on Sat Jun 13 21:18:26 2026
 """
 
 import os
-import json
 from google import genai
 from google.genai import types
 from gemini_output import VocabCard
 
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-#%%
+def _get_client():
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is not set")
+
+    return genai.Client(api_key=api_key)
 
 def generate_card_data(word: str, source_language: str ="Spanish", target_language: str="English"):
     prompt = f"""
@@ -26,6 +29,8 @@ def generate_card_data(word: str, source_language: str ="Spanish", target_langua
     Target language: {target_language}
     """
 
+    client = _get_client()
+
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt,
@@ -37,6 +42,4 @@ def generate_card_data(word: str, source_language: str ="Spanish", target_langua
     )
 
     return response.parsed
-
-#%%
 
