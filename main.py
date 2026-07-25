@@ -5,6 +5,10 @@ Created on Sat Jun 13 20:19:46 2026
 @author: heidi
 """
 
+import os
+
+os.chdir("C:/Users/heidi/Documents/ankicards")
+
 from anki_requests import add_anki_card
 from gemini_prompts import generate_card_data
 from pexels_requests import search_and_download_image
@@ -14,7 +18,7 @@ MODEL_NAME = "AI Vocabulary Typing"
 
 
 # Run AI to get translations and description of the given word
-card = generate_card_data("un templo", 
+card = generate_card_data("enfatizar", 
                           source_language="Spanish",
                           target_language="English")
 

@@ -1,16 +1,44 @@
-# ankiweb_cards
-This python tool helps you create cards to Anki Web application. 
+# Anki Cards
 
-**Requirements**
-1) You need a API key to Google Gemini and a API key to Pexel (a free image bank).
-Store these API keys in an .env file for the app.
-2) You also need a Anki Connector installed in you Anki Desktop.
-3) When you run this app, you need to have Anki Desktop open/running.
-4) You can create a template for cards in Anki Desktop. Mine is called "AI Vocabulary Typing" and it requires the input of the card includes a text field. 
+A small Python project that generates Anki flashcards from text using Gemini and downloads related images from Pexels.
 
-**What is this app about?**
-You give the code a Spanish word. The app uses Google Gemini AI to find its translation, description in Spanish and an example sentence in Spanish. 
+## Features
 
-After the Gemini, the app calls Pexel API and fetches an image using the English translation. Basically, the app could be fetch several images but since it does not have any selection logic for images, it is good to search only one.
+- Sends content to Gemini to generate card data
+- Creates Anki cards through the Anki API
+- Downloads matching images from Pexels
+- Stores generated image assets in the local images folder
 
-Finally, the app calls Anki Desktop and creates a card using the information from Gemini and Pexel. 
+## Requirements
+
+Install dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Setup
+
+1. Create a `.env` file in the project root.
+2. Add your API keys and configuration values, for example:
+
+```env
+ANKI_URL=http://localhost:8765
+ANKI_DECK=YourDeckName
+PEXELS_API_KEY=your_pexels_key
+GEMINI_API_KEY=your_gemini_key
+```
+
+## Run
+
+```bash
+python main.py
+```
+
+## Project Files
+
+- `main.py` - entry point for the workflow
+- `gemini_prompts.py` - Gemini prompt generation
+- `gemini_output.py` - response schema for generated card data
+- `anki_requests.py` - Anki API integration
+- `pexels_requests.py` - image search and download logic
