@@ -1,8 +1,0 @@
-from service import cardService
-
-class cardController:
-    def __init__(self, card_service: cardService):
-        self.card_service = card_service
-
-    def create_cards(self, text: str):
-        self.card_service.create_cards(text)
