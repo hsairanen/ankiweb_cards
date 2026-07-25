@@ -35,6 +35,12 @@ GEMINI_API_KEY=your_gemini_key
 python main.py
 ```
 
+## Anki Add-on UI
+
+In Anki, use the Tools menu item to open the `ankiweb_cards` dockable tab.
+It currently provides placeholder input fields for the word, languages, deck name, and model name.
+The tab does not run the card-generation workflow yet.
+
 ## Project Files
 
 - `main.py` - entry point for the workflow

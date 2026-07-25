@@ -1,3 +1,3 @@
-from .addon import setup
+from .ui.panel import setup
 
 setup()
