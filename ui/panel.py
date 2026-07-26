@@ -13,14 +13,14 @@ from aqt.qt import (
     QPushButton,
 )
 
-from ..controller.cardController import cardController
+from ..controller.CardController import CardController
 
-
+# Global variable to hold the reference to the card tab. This is used to ensure that only one instance of the card tab exists at any given time.
 _card_tab: Optional[QDockWidget] = None
 
-
-class cardTab(QWidget):
-    def __init__(self, controller: cardController):
+# This class represents the card tab in the Anki interface. It contains a text input for the user to enter a word and a button to generate cards based on that word.
+class CardTab(QWidget):
+    def __init__(self, controller: CardController):
         super().__init__()
 
         self.controller = controller
@@ -36,17 +36,28 @@ class cardTab(QWidget):
         self.word_input.setPlaceholderText("Type a word...")
         layout.addWidget(self.word_input)
 
+        # Create error label, set its style and visibility, 
+        # and add it to the layout
+        self.error_label = QLabel("")
+        self.error_label.setStyleSheet("color: red;")
+        self.error_label.setVisible(False)
+        layout.addWidget(self.error_label)
+
         # Create generate button, connect the button click and add the button to the layout
         self.generate_button = QPushButton("Generate")
-        self.generate_button.clicked.connect(self.on_generate_clicked)
+        self.generate_button.clicked.connect(self._handle_generate_clicked)
         layout.addWidget(self.generate_button)
 
-    def on_generate_clicked(self) -> None:
-        # Get the word from the input field and strip any leading/trailing whitespace
-        word = self.word_input.text().strip()
-
-        if word:
-            self.controller.create_cards(word)
+    def _handle_generate_clicked(self) -> None:
+        # The controller's on_generate_clicked method raises an exception for invalid input
+        try:
+            self.controller.on_generate_clicked(self.word_input.text())
+        except Exception as e:
+            self.error_label.setText(str(e))
+            self.error_label.setVisible(True)
+        else:
+            self.error_label.clear()
+            self.error_label.setVisible(False)
 
 # This function is called when the add-on is loaded. 
 # It sets up the necessary hooks and actions for the add-on.
@@ -84,8 +95,8 @@ def _build_card_tab() -> QDockWidget:
         | Qt.DockWidgetArea.RightDockWidgetArea
     )
 
-    controller = cardController()
+    controller = CardController()
 
-    dock.setWidget(cardTab(controller))
+    dock.setWidget(CardTab(controller))
 
     return dock
