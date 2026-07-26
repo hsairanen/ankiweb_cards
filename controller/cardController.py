@@ -1,4 +1,4 @@
-from ..service.CardService import CardService
+from ..application.CardService import CardService
 
 class CardController:
     def __init__(self):

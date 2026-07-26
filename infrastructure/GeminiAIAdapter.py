@@ -1,5 +1,3 @@
-import os
-
 from google import genai
 from google.genai import types
 
@@ -8,19 +6,20 @@ from google.genai import types
 # The application code should not directly interact with the Gemini API; 
 # instead, it should use this adapter to ensure a clean separation of concerns.
 class GeminiPromptAdapter:    
-    def __init__(self):
-           self._client = None
-   
-    # This method initializes and returns a client for interacting with the Gemini API.
-    def _get_client(self):
-        if not self._client:
-            api_key = os.getenv("GEMINI_API_KEY")
-            if not api_key:
-                raise RuntimeError("GEMINI_API_KEY is not set")
-      
-            self._client = genai.Client(api_key=api_key)
-        return self._client
-   
-    
-   
+    def __init__(self, client):
+        self._client = client
+        
+   # This method sends a prompt to the Gemini API and returns the parsed response.
+    def send_prompt(self, prompt: str, output_schema):
+        response = self._client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            response_mime_type="application/json",
+            response_schema=output_schema,
+            temperature=0.2)
+        )
+
+        return response.parsed
+
         
