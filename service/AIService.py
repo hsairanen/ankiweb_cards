@@ -1,15 +1,10 @@
 import os
 from google import genai
+from google.genai import types
 
+# This class serves as a service layer for AI-related operations. 
+# AIService is responsible for prompt engineering and AI-related logic
 class AIService:
     def __init__(self):
-        self._client = None
+        pass
 
-    def _get_client(self):
-        if not self._client:
-            api_key = os.getenv("GEMINI_API_KEY")
-            if not api_key:
-                raise RuntimeError("GEMINI_API_KEY is not set")
-   
-            self._client = genai.Client(api_key=api_key)
-        return self._client

@@ -1,5 +1,7 @@
-#from ..service.AIService import AIService
+from ..service.AIService import AIService
 
+# This class serves as a service layer for card-related operations.
+# CardService is responsible for handling the business logic related to card generation.
 class CardService:
     def __init__(self):
         pass
