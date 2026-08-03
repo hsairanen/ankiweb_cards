@@ -11,9 +11,9 @@ class CardService:
     # based on that information.            
     def process_word(self, word: str):
 
-        response = 'testing'
+        #response = 'testing'
         # Call AI
-        #response = self.ai_service.get_word_info(word)
+        response = self.ai_service.write_prompt(word)
         # Parse response
         # Create Anki cards
         return response
