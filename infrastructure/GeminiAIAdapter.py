@@ -5,6 +5,7 @@ from google.genai import types
 # It handles the actual HTTP/OpenAI API communication.
 # The application code should not directly interact with the Gemini API; 
 # instead, it should use this adapter to ensure a clean separation of concerns.
+# In other words, the adapter's responsibility is to translate the application's calls into Gemini API calls.
 class GeminiPromptAdapter:    
     def __init__(self, client):
         self._client = client

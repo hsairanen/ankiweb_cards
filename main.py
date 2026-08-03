@@ -39,7 +39,7 @@ def create_card_from_word(
 
 if __name__ == "__main__":
     create_card_from_word(
-        "cirujano",
+        "desahuciar",
         deck_name="Español::Clase 2026",
         model_name="AI Vocabulary Typing",
         source_language="Spanish",

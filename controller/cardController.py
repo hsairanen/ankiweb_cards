@@ -1,8 +1,8 @@
 from ..application.CardService import CardService
 
 class CardController:
-    def __init__(self):
-        self.card_service = CardService()
+    def __init__(self, card_service: CardService):
+        self.card_service = card_service
 
     # This function is called when the "Generate" button is clicked. 
     # It retrieves the word from the input field, validates it, and then calls the card service 

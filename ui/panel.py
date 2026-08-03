@@ -13,6 +13,7 @@ from aqt.qt import (
     QPushButton,
 )
 
+from ..app_factory import build_card_controller
 from ..controller.CardController import CardController
 
 # Global variable to hold the reference to the card tab. This is used to ensure that only one instance of the card tab exists at any given time.
@@ -66,7 +67,7 @@ def setup() -> None:
 
 # This function adds an action to the Anki Tools menu that allows users to open the AI cards tab.
 def _add_card_tab_action() -> None:
-    action = QAction("Open AI cards tab", mw)
+    action = QAction("Create AI cards", mw)
     action.triggered.connect(_show_card_tab)
     mw.form.menuTools.addAction(action)
 
@@ -95,7 +96,7 @@ def _build_card_tab() -> QDockWidget:
         | Qt.DockWidgetArea.RightDockWidgetArea
     )
 
-    controller = CardController()
+    controller = build_card_controller()
 
     dock.setWidget(CardTab(controller))
 

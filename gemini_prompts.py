@@ -32,7 +32,7 @@ def generate_card_data(word: str, source_language: str ="Spanish", target_langua
     client = _get_client()
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-2.5-flash-lite",
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
