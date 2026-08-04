@@ -43,6 +43,13 @@ class CardTab(QWidget):
         self.error_label.setStyleSheet("color: red;")
         self.error_label.setVisible(False)
         layout.addWidget(self.error_label)
+        
+        # Create result label, set its style and visibility, 
+        # and add it to the layout
+        self.result_label = QLabel("")
+        self.result_label.setStyleSheet("color: green;")
+        self.result_label.setVisible(False)
+        layout.addWidget(self.result_label)
 
         # Create generate button, connect the button click and add the button to the layout
         self.generate_button = QPushButton("Generate")
@@ -50,15 +57,13 @@ class CardTab(QWidget):
         layout.addWidget(self.generate_button)
 
     def _handle_generate_clicked(self) -> None:
-        # The controller's on_generate_clicked method raises an exception for invalid input
-        try:
-            self.controller.on_generate_clicked(self.word_input.text())
-        except Exception as e:
-            self.error_label.setText(str(e))
+        result = self.controller.on_generate_clicked(self.word_input.text())
+        if not result.success:
+            self.error_label.setText(result.error)
             self.error_label.setVisible(True)
         else:
-            self.error_label.clear()
-            self.error_label.setVisible(False)
+            self.result_label.setText(f"A card generated successfully for the word '{result.card.word_trans}'!")
+            self.result_label.setVisible(True)
 
 # This function is called when the add-on is loaded. 
 # It sets up the necessary hooks and actions for the add-on.

@@ -1,5 +1,9 @@
-from google import genai
 from google.genai import types
+from typing import TypeVar, Type
+
+from ..application.exceptions.ai_exceptions import AIQuotaExceededError, AIServiceError
+
+T = TypeVar("T")
 
 # The adapter class serves as a bridge between the application and the Gemini API.
 # It handles the actual HTTP/OpenAI API communication.
@@ -11,16 +15,26 @@ class GeminiPromptAdapter:
         self._client = client
         
    # This method sends a prompt to the Gemini API and returns the parsed response.
-    def send_prompt(self, prompt: str, output_schema):
-        response = self._client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            response_schema=output_schema,
-            temperature=0.2)
-        )
+   # What could be a better name for this method? It is not just sending a prompt, it is also parsing the response.
+    def runAI(self, prompt: str, output_schema: Type[T]) -> T:
+        try:
+            response = self._client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=output_schema,
+                temperature=0.2)
+            )
+            
+            if response.parsed is None:
+                raise ValueError("No response was returned by the AI.")
 
-        return response.parsed
+            return response.parsed
+        except Exception as e:
+            if "Quota exceeded" in str(e):
+                raise AIQuotaExceededError() from e
+
+            raise AIServiceError() from e
 
         

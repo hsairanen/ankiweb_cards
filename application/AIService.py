@@ -4,10 +4,12 @@ from .dto.VocabCard import VocabCard
 # AIService is responsible for prompt engineering and AI-related logic
 
 class AIService:
+    SCHEMA = VocabCard
+    
     def __init__(self, adapter):
         self.adapter = adapter
     
-    def write_prompt(self, word: str, source_language: str = "Spanish", target_language: str = "English") -> str:        
+    def run_prompt(self, word: str, source_language: str = "Spanish", target_language: str = "English") -> VocabCard:        
         prompt = f"""
         Identify the most common meaning of the word in {source_language} 
         and translate it into {target_language}. Explain the word clearly and learner-friendly
@@ -17,5 +19,6 @@ class AIService:
         Source language: {source_language}
         Target language: {target_language}
         """
-        return prompt
+  
+        return self.adapter.runAI(prompt, self.SCHEMA)
     

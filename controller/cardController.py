@@ -1,3 +1,4 @@
+from ..application.dto.VocabResult import VocabResult
 from ..application.CardService import CardService
 
 class CardController:
@@ -7,13 +8,11 @@ class CardController:
     # This function is called when the "Generate" button is clicked. 
     # It retrieves the word from the input field, validates it, and then calls the card service 
     # to create cards based on that word.        
-    def on_generate_clicked(self, word: str) -> None:
-        # Check that the word contains only letters and spaces
+    def on_generate_clicked(self, word: str):
         if not word.replace(" ", "").isalpha():
-            raise ValueError("Please enter a word containing only letters and spaces.")
+            return VocabResult(
+                success=False,
+                error="Please enter a word containing only letters and spaces."
+            )
 
-        response = self.card_service.process_word(word)
-        if isinstance(response, str):
-           return response
-
-        return None 
+        return self.card_service.process_word(word)
