@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from application.CardService import CardService
+from application.services.CardService import CardService
 
 
 class TestCardService:

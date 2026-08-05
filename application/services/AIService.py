@@ -1,4 +1,4 @@
-from .dto.VocabCard import VocabCard
+from ..dto.VocabCard import VocabCard
 
 # This class serves as a service layer for AI-related operations. 
 # AIService is responsible for prompt engineering and AI-related logic

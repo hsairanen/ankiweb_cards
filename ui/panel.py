@@ -11,7 +11,9 @@ from aqt.qt import (
     QVBoxLayout,
     QLabel,
     QPushButton,
+    QComboBox,
 )
+from ..controller.request.CreateCardRequest import CreateCardRequest
 
 from ..app_factory import build_card_controller
 from ..controller.CardController import CardController
@@ -23,12 +25,22 @@ _card_tab: Optional[QDockWidget] = None
 class CardTab(QWidget):
     def __init__(self, controller: CardController):
         super().__init__()
-
+    
         self.controller = controller
 
         # Creates a vertical layout - places components on top of each other
         layout = QVBoxLayout(self)
+                
+        # Create a dropdown for deck selection and add it to the layout
+        self.deck_dropdown = QComboBox()
 
+        # Fetch all deck names from Anki and populate the dropdown
+        self.deck_dropdown.addItems(
+            sorted(mw.col.decks.all_names())
+        )
+
+        layout.addWidget(self.deck_dropdown)
+        
         # Add a label
         layout.addWidget(QLabel("Enter word:"))
 
@@ -57,14 +69,22 @@ class CardTab(QWidget):
         layout.addWidget(self.generate_button)
 
     def _handle_generate_clicked(self) -> None:
-        result = self.controller.on_generate_clicked(self.word_input.text())
+        selected_deck = self.deck_dropdown.currentText()
+        request = CreateCardRequest(
+            deck_name=selected_deck,
+            word=self.word_input.text()
+        )
+        
+        result = self.controller.on_generate_clicked(request)
+       
         if not result.success:
             self.error_label.setText(result.error)
             self.error_label.setVisible(True)
         else:
             self.result_label.setText(f"A card generated successfully for the word '{result.card.word_trans}'!")
             self.result_label.setVisible(True)
-
+    
+    
 # This function is called when the add-on is loaded. 
 # It sets up the necessary hooks and actions for the add-on.
 def setup() -> None:
