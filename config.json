@@ -1,4 +1,5 @@
 {
-  "deck_name": "Español::Clase 2026",
-  "model_name": "AI Vocabulary Typing"
+  "model_name": "AI Vocabulary Typing Test",
+  "model_front_template": "<div class=\"word\">\n  {{Front}}\n</div>\n\n<br>\n\n{{type:Back}}",
+  "model_back_template": "<div class=\"word\">\n  {{Front}}\n</div>\n\n<hr id=\"answer\">\n\n{{type:Back}}"
 }

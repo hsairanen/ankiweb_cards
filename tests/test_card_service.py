@@ -12,7 +12,7 @@ class TestCardService:
         response = Mock()
         ai_service.run_prompt.return_value = response
 
-        service = CardService(ai_service)
+        service = CardService(ai_service, Mock(), "AI Vocabulary Typing")
 
         result = service.process_word("hola")
 

@@ -1,6 +1,6 @@
 from ...controller.request import CreateCardRequest
 
-from ..dto import AnkiCardCommand, VocabCard
+from ..dto import AnkiCardCommand
 from ..dto.VocabResult import VocabResult
 from ..exceptions.ai_exceptions import (
     AIServiceError,
@@ -10,9 +10,6 @@ from ..dto.AnkiCardCommand import AnkiCardCommand
 from ..port.CardRepository import CardRepository
 
 from .AIService import AIService
-
-from aqt import mw
-from anki.notes import Note
 
 # This class serves as a service layer for card-related operations.
 # CardService is responsible for handling the business logic related to card generation.
@@ -47,7 +44,6 @@ class CardService:
                     
             command = AnkiCardCommand(
                         deck_name=request.deck_name,
-                        model_name="AI Vocabulary Typing",
                         front=to_front,
                         back=to_back
             )

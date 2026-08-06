@@ -3,6 +3,7 @@ from aqt import mw
 
 from google import genai
 
+from .application.config import load_addon_config
 from .infrastructure.AnkiCollectionAdapter import AnkiCollectionAdapter
 from .application.services.AIService import AIService
 from .application.services.CardService import CardService
@@ -12,7 +13,8 @@ from .infrastructure.GeminiAIAdapter import GeminiPromptAdapter
 
 def build_card_controller() -> CardController:
    
-    repository = AnkiCollectionAdapter(collection=mw.col)
+    config = load_addon_config()
+    repository = AnkiCollectionAdapter(collection=mw.col, addon_config=config)
     
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
