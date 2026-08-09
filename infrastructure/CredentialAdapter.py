@@ -1,23 +1,20 @@
-"""import keyring
-
-SERVICE_NAME = "ankiweb_cards"
-KEY_NAME = "api_key"
-
-
-def get_api_key() -> str | None:
-    return keyring.get_password(SERVICE_NAME, KEY_NAME)
-
-
-def save_api_key(api_key: str) -> None:
-    keyring.set_password(SERVICE_NAME, KEY_NAME, api_key)
-
-
-def delete_api_key() -> None:
-    try:
-        keyring.delete_password(SERVICE_NAME, KEY_NAME)
-    except Exception:
-        pass"""
+import keyring
 
 class CredentialAdapter:
+    SERVICE_NAME = "ankiweb_cards"    
+    
     def __init__(self):
         pass
+    
+    def get_api_key(self, key_name: str) -> str | None:
+        return keyring.get_password(self.SERVICE_NAME, key_name)
+
+    def save_api_key(self, key_name: str, api_key: str) -> None:
+        keyring.set_password(self.SERVICE_NAME, key_name, api_key)
+
+    def delete_api_key(self, key_name: str) -> None:
+        try:
+            keyring.delete_password(self.SERVICE_NAME, key_name)
+        except Exception:
+            pass
+

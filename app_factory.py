@@ -16,8 +16,7 @@ from .infrastructure.GeminiAIAdapter import GeminiPromptAdapter
 
 def build_credential_controller() -> CredentialController:
     repository = CredentialAdapter()
-    #credential_service = CredentialService(repository) # Not build yet
-    credential_service = CredentialService()
+    credential_service = CredentialService(repository)
     return CredentialController(credential_service)
 
 
@@ -37,7 +36,9 @@ def build_card_controller(api_key: str) -> CardController:
 def build_card_controller_if_configured(credential_controller: CredentialController) -> CardController | None:
     
     #api_key = credential_controller.get_credential("GEMINI_API_KEY")
+    # For testing
     api_key = os.getenv("GEMINI_API_KEY")
+    #api_key = None
     
     if not api_key:
         return None

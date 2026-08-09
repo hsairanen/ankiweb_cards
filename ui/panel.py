@@ -16,6 +16,7 @@ from aqt.qt import (
     QComboBox,
 )
 from ..controller.request.CreateCardRequest import CreateCardRequest
+from ..controller.request.SaveApiKeyRequest import SaveApiKeyRequest
 from ..controller.CardController import CardController
 from ..controller.CredentialController import CredentialController
 
@@ -145,8 +146,11 @@ class CardTab(QWidget):
 
         if dialog.exec() == QDialog.DialogCode.Accepted:
             api_key = dialog.get_api_key()
-
-            #self.credential_controller.set_credential("GEMINI_API_KEY", api_key)
+            request = SaveApiKeyRequest(
+                key_name="GEMINI_API_KEY",
+                api_key=api_key
+            )
+            self.credential_controller.on_save_clicked(request)
             
 # This function is called when the add-on is loaded. 
 # It sets up the necessary hooks and actions for the add-on.
