@@ -18,3 +18,4 @@ class CardController:
             )
 
         return self.card_service.process_word(request)
+    
