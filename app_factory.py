@@ -3,8 +3,11 @@ from aqt import mw
 
 from google import genai
 
+from .ui.card_tab import CardTab
+
 from .controller.CredentialController import CredentialController
 from .application.services.CredentialService import CredentialService
+from .application.port.CredentialRepository import CredentialRepository
 from .infrastructure.CredentialAdapter import CredentialAdapter
 
 from .application.config import load_addon_config
@@ -14,33 +17,27 @@ from .controller.CardController import CardController
 from .infrastructure.AnkiCollectionAdapter import AnkiCollectionAdapter
 from .infrastructure.GeminiAIAdapter import GeminiPromptAdapter
 
-def build_credential_controller() -> CredentialController:
-    repository = CredentialAdapter()
-    credential_service = CredentialService(repository)
-    return CredentialController(credential_service)
-
-
-def build_card_controller(api_key: str) -> CardController:
+def build_card_controller(credential_repository: CredentialRepository) -> CardController:
    
     config = load_addon_config()
-    repository = AnkiCollectionAdapter(collection=mw.col, addon_config=config)
+    anki_repository = AnkiCollectionAdapter(collection=mw.col, addon_config=config)
     
-    client = genai.Client(api_key=api_key)
-    gemini_adapter = GeminiPromptAdapter(client)
+    gemini_adapter = GeminiPromptAdapter(credential_repository=credential_repository)
     ai_service = AIService(gemini_adapter)
     
-    card_service = CardService(ai_service, repository)
+    card_service = CardService(ai_service, anki_repository)
 
     return CardController(card_service)
 
-def build_card_controller_if_configured(credential_controller: CredentialController) -> CardController | None:
+
+# This function is used to wire things together and build the card tab for the UI.
+def build_card_tab() -> CardTab:
     
-    #api_key = credential_controller.get_credential("GEMINI_API_KEY")
-    # For testing
-    api_key = os.getenv("GEMINI_API_KEY")
-    #api_key = None
+    credentialRepository = CredentialAdapter()
+    credential_service = CredentialService(credentialRepository)
+    credential_controller = CredentialController(credential_service)
     
-    if not api_key:
-        return None
+    card_controller = build_card_controller(credential_repository=credentialRepository)
     
-    return build_card_controller(api_key)
+    return CardTab(card_controller=card_controller,
+                   credential_controller=credential_controller)

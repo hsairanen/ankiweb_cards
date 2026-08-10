@@ -1,6 +1,8 @@
 from pydantic.dataclasses import dataclass
 
+from ...application.credentials.CredentialType import CredentialType
+
 @dataclass(frozen=True)
 class SaveApiKeyRequest:
-    key_name: str
+    credential_type: CredentialType
     api_key: str

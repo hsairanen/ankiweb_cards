@@ -5,6 +5,7 @@ from ..dto.VocabResult import VocabResult
 from ..exceptions.ai_exceptions import (
     AIServiceError,
     AIQuotaExceededError,
+    MissingApiKeyError
 )
 from ..dto.AnkiCardCommand import AnkiCardCommand
 from ..port.CardRepository import CardRepository
@@ -35,6 +36,11 @@ class CardService:
             return VocabResult(
                 success=False,
                 error="AI service is currently unavailable. Please try again later."
+            )
+        except MissingApiKeyError:
+            return VocabResult(
+                success=False,
+                error="AI API key is not configured. Please set it up first."
             )
         
         # Create an Anki card using the information returned by the AI service.

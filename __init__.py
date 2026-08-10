@@ -4,6 +4,6 @@ except Exception:
 	# Skip auto-setup when running in test or non-Anki environments
 	pass
 else:
-	from .ui.panel import setup
+	from .ui.menu_setup import setup
 
 	setup()

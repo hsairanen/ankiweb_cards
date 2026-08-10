@@ -3,3 +3,6 @@ class AIServiceError(Exception):
 
 class AIQuotaExceededError(AIServiceError):
     pass
+
+class MissingApiKeyError(Exception):
+    pass
