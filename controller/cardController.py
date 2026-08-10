@@ -9,7 +9,7 @@ class CardController:
     # This function is called when the "Generate" button is clicked. 
     # It retrieves the word from the input field, validates it, and then calls the card service 
     # to create cards based on that word.        
-    def on_generate_clicked(self, request: CreateCardRequest):
+    def on_generate_clicked(self, request: CreateCardRequest) -> VocabResult:
 
         if not request.word.replace(" ", "").isalpha():
             return VocabResult(

@@ -12,6 +12,7 @@ from ..controller.request.CreateCardRequest import CreateCardRequest
 from ..controller.request.SaveApiKeyRequest import SaveApiKeyRequest
 from ..controller.CardController import CardController
 from ..controller.CredentialController import CredentialController
+from ..controller.AIModelController import AIModelController
 from ..application.credentials.CredentialType import CredentialType
 
 from .api_key_dialog import ApiKeyDialog
@@ -20,19 +21,37 @@ from .api_key_dialog import ApiKeyDialog
 class CardTab(QWidget):
     def __init__(self, 
                  card_controller: CardController | None, 
-                 credential_controller: CredentialController):
+                 credential_controller: CredentialController,
+                 ai_model_controller: AIModelController):
         super().__init__()
     
         self.card_controller = card_controller
         self.credential_controller = credential_controller
+        self.ai_model_controller = ai_model_controller
 
         # Creates a vertical layout - places components on top of each other
         layout = QVBoxLayout(self)
+        
+        # ------- MANAGE API KEYS SECTION -------
         
         # Create API button, connect the button click and add the button to the layout
         self.api_button = QPushButton("Manage API Keys")
         self.api_button.clicked.connect(self._handle_api_clicked)
         layout.addWidget(self.api_button)  
+        
+        # ------- AVAILABLE AI MODELS SECTION -------
+        
+        layout.addWidget(QLabel("Available AI models:"))
+        self.model_dropdown = QComboBox()
+        self.model_dropdown.addItem("Loading models...")
+        self.model_dropdown.setEnabled(False)
+        layout.addWidget(self.model_dropdown)
+
+        self.model_status_label = QLabel("")
+        self.model_status_label.setStyleSheet("color: gray;")
+        layout.addWidget(self.model_status_label)
+        
+        # ------- CARD GENERATION SECTION -------
         
         # Add a label
         layout.addWidget(QLabel("Select deck:"))
@@ -73,6 +92,8 @@ class CardTab(QWidget):
         self.generate_button = QPushButton("Generate")
         self.generate_button.clicked.connect(self._handle_generate_clicked)
         layout.addWidget(self.generate_button)
+        
+        self._load_models()
 
     def _handle_generate_clicked(self) -> None:
         
@@ -96,6 +117,7 @@ class CardTab(QWidget):
             f"the word '{result.card.word_trans}'!"
         )
         self.result_label.setVisible(True)
+        
 
     def _handle_api_clicked(self) -> None:
         dialog = ApiKeyDialog(self)
@@ -107,4 +129,17 @@ class CardTab(QWidget):
                 api_key=api_key
             )
             self.credential_controller.on_save_clicked(request)
-            
+            self._load_models()
+    
+    def _load_models(self) -> None:
+        models = self.ai_model_controller.get_available_models()
+
+        self.model_dropdown.clear()
+
+        for model in models:
+            self.model_dropdown.addItem(
+                model.display_name,
+                model.id,
+            )
+
+        self.model_dropdown.setEnabled(True)
