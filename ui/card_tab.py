@@ -124,12 +124,24 @@ class CardTab(QWidget):
         dialog = ApiKeyDialog(self)
 
         if dialog.exec() == QDialog.DialogCode.Accepted:
-            api_key = dialog.get_api_key()
-            request = SaveApiKeyRequest(
-                credential_type=CredentialType.GEMINI,
-                api_key=api_key
-            )
-            self.credential_controller.on_save_clicked(request)
+            gemini_api_key = dialog.get_api_key()
+            if gemini_api_key:
+                self.credential_controller.on_save_clicked(
+                    SaveApiKeyRequest(
+                        credential_type=CredentialType.GEMINI,
+                        api_key=gemini_api_key,
+                    )
+                )
+
+            image_bank_api_key = dialog.get_image_bank_api_key()
+            if image_bank_api_key:
+                self.credential_controller.on_save_clicked(
+                    SaveApiKeyRequest(
+                        credential_type=CredentialType.PEXELS,
+                        api_key=image_bank_api_key,
+                    )
+                )
+
             self._load_models()
     
     def _load_models(self) -> None:

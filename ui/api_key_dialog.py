@@ -7,7 +7,7 @@ from aqt.qt import (
     QDialogButtonBox,
 )
 
-# This class represents a dialog window that prompts the user to enter their API key. It contains a text input for the API key and buttons to save or cancel the action.
+# This class represents a dialog window that prompts the user to enter API keys.
 class ApiKeyDialog(QDialog):
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
@@ -22,14 +22,21 @@ class ApiKeyDialog(QDialog):
 
         # API key input
         self.api_key_input = QLineEdit()
-        self.api_key_input.setPlaceholderText("Enter Google Gemini API key...")
+        #self.api_key_input.setPlaceholderText("Enter Google Gemini API key...")
         
         # Hide the API key characters
         self.api_key_input.setEchoMode(QLineEdit.EchoMode.Password)
 
         layout.addWidget(self.api_key_input)
 
-        # Save / Cancel buttons
+        layout.addWidget(QLabel("Enter your image bank Pexels API key:"))
+
+        self.image_bank_api_key_input = QLineEdit()
+        #self.image_bank_api_key_input.setPlaceholderText("Enter image bank API key...")
+        self.image_bank_api_key_input.setEchoMode(QLineEdit.EchoMode.Password)
+
+        layout.addWidget(self.image_bank_api_key_input)
+
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Save
             | QDialogButtonBox.StandardButton.Cancel
@@ -42,3 +49,6 @@ class ApiKeyDialog(QDialog):
 
     def get_api_key(self) -> str:
         return self.api_key_input.text().strip()
+
+    def get_image_bank_api_key(self) -> str:
+        return self.image_bank_api_key_input.text().strip()

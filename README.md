@@ -29,6 +29,8 @@ PEXELS_API_KEY=your_pexels_key
 GEMINI_API_KEY=your_gemini_key
 ```
 
+In the Anki add-on UI, the "Manage API Keys" dialog now includes fields for both the Gemini API key and the image bank API key.
+
 ## Run
 
 ```bash
