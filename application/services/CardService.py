@@ -26,7 +26,7 @@ class CardService:
 
         # Get the AI-generated card information for the given word.
         try:
-            card = self.ai_service.run_prompt(request.word)
+            card = self.ai_service.run_prompt(request.word, request.model_id)
         except AIQuotaExceededError:
             return VocabResult(
                 success=False,

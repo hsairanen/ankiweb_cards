@@ -4,3 +4,4 @@ from pydantic.dataclasses import dataclass
 class CreateCardRequest:
     deck_name: str
     word: str
+    model_id: str

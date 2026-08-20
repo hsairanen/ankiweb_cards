@@ -100,7 +100,8 @@ class CardTab(QWidget):
         selected_deck = self.deck_dropdown.currentText()
         request = CreateCardRequest(
             deck_name=selected_deck,
-            word=self.word_input.text()
+            word=self.word_input.text(),
+            model_id=self.model_dropdown.currentData()
         )
         
         result = self.card_controller.on_generate_clicked(request)

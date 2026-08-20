@@ -14,7 +14,7 @@ class GeminiPromptAdapter:
     def __init__(self, credential_repository: CredentialRepository):
         self._credential_repository = credential_repository
         
-    def run_ai(self, prompt: str, output_schema: Type[T]) -> T:
+    def run_ai(self, prompt: str, model_id: str, output_schema: Type[T]) -> T:
         api_key = self._credential_repository.get_api_key(CredentialType.GEMINI)
             
         if not api_key:
@@ -24,7 +24,7 @@ class GeminiPromptAdapter:
             client = genai.Client(api_key=api_key)
             
             response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model=model_id,
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
