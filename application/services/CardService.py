@@ -7,16 +7,22 @@ from ..exceptions.ai_exceptions import (
     AIQuotaExceededError,
     MissingApiKeyError
 )
+from ..exceptions.image_exceptions import (
+    ImageServiceError
+)
+
 from ..dto.AnkiCardCommand import AnkiCardCommand
 from ..port.CardRepository import CardRepository
 
 from .AIService import AIService
+from .ImageService import ImageService
 
 # This class serves as a service layer for card-related operations.
 # CardService is responsible for handling the business logic related to card generation.
 class CardService:
-    def __init__(self, ai_service: AIService, repository: CardRepository):
+    def __init__(self, ai_service: AIService, image_service: ImageService, repository: CardRepository):
         self.ai_service = ai_service
+        self.image_service = image_service
         self.repository = repository
 
     # This method processes the input word, calls the AI service 
@@ -43,6 +49,12 @@ class CardService:
                 error="AI API key is not configured. Please set it up first."
             )
         
+        image_data = None
+        try:
+            image_data = self.image_service.fetch_image(card.word_trans)
+        except ImageServiceError:
+            image_data = None
+            
         # Create an Anki card using the information returned by the AI service.
         try:
             to_front = f"{card.definition} ({card.word_trans})"
@@ -51,7 +63,9 @@ class CardService:
             command = AnkiCardCommand(
                         deck_name=request.deck_name,
                         front=to_front,
-                        back=to_back
+                        back=to_back,
+                        image_data=image_data,
+                        image_filename=f"{card.word_orig}.jpg"
             )
                     
             self.repository.add_card(command)

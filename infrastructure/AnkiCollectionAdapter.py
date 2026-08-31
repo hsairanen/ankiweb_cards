@@ -32,10 +32,18 @@ class AnkiCollectionAdapter:
 
         # Create a new note with the specified model.
         note = Note(self.collection, model)
-        note["Front"] = command.front
+        
+        if command.image_data:
+            image_filename = self.collection.media.write_data(
+                command.image_filename,
+                command.image_data,
+            )
+            note["Front"] = f'<img src="{image_filename}"><br>{command.front}'
+        else:
+            note["Front"] = command.front
+        
         note["Back"] = command.back
-
+                            
         # Add the note to the collection and save changes.
         self.collection.add_note(note, deck_id)
         self.collection.save()
-        

@@ -4,15 +4,16 @@ from .ui.card_tab import CardTab
 
 from .controller.CredentialController import CredentialController
 from .application.services.CredentialService import CredentialService
-from .application.port.CredentialRepository import CredentialRepository
 from .infrastructure.CredentialAdapter import CredentialAdapter
 
 from .application.config import load_addon_config
 from .application.services.AIService import AIService
+from .application.services.ImageService import ImageService
 from .application.services.CardService import CardService
 from .controller.CardController import CardController
 from .infrastructure.AnkiCollectionAdapter import AnkiCollectionAdapter
 from .infrastructure.GeminiAIAdapter import GeminiPromptAdapter
+from .infrastructure.PexelImageAdapter import PexelImageAdapter
 
 from .controller.AIModelController import AIModelController
 
@@ -29,7 +30,10 @@ def build_card_tab() -> CardTab:
     gemini_adapter = GeminiPromptAdapter(credential_repository=credential_repository)
     ai_service = AIService(gemini_adapter)
     
-    card_service = CardService(ai_service, anki_repository)
+    image_adapter = PexelImageAdapter(credential_repository=credential_repository)
+    image_service = ImageService(image_adapter)
+    
+    card_service = CardService(ai_service, image_service, anki_repository)
     card_controller = CardController(card_service)
     
     ai_model_controller = AIModelController(ai_service)

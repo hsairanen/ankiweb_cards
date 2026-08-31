@@ -47,7 +47,7 @@ def add_anki_card(deck_name, model_name, front, back, image_path=None, tags=None
         image_filename = os.path.basename(image_path)
 
         # Image first, text below
-        note["fields"]["Front"] = f'<img src="{image_filename}"><br>{front}'
+        
 
         note["picture"] = [
             {
