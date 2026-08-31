@@ -31,6 +31,8 @@ class CardTab(QWidget):
 
         # Creates a vertical layout - places components on top of each other
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(16, 16, 16, 16)
+        layout.setSpacing(16)
         
         # ------- MANAGE API KEYS SECTION -------
         
@@ -41,20 +43,28 @@ class CardTab(QWidget):
         
         # ------- AVAILABLE AI MODELS SECTION -------
         
-        layout.addWidget(QLabel("Available AI models:"))
+        model_layout = QVBoxLayout()
+        model_layout.setSpacing(4)
+        
+        model_layout.addWidget(QLabel("Available AI models:"))
         self.model_dropdown = QComboBox()
         self.model_dropdown.addItem("Loading models...")
         self.model_dropdown.setEnabled(False)
-        layout.addWidget(self.model_dropdown)
+        model_layout.addWidget(self.model_dropdown)
 
         self.model_status_label = QLabel("")
         self.model_status_label.setStyleSheet("color: gray;")
-        layout.addWidget(self.model_status_label)
+        model_layout.addWidget(self.model_status_label)
+        
+        layout.addLayout(model_layout)
         
         # ------- CARD GENERATION SECTION -------
         
+        deck_layout = QVBoxLayout()
+        deck_layout.setSpacing(4)
+        
         # Add a label
-        layout.addWidget(QLabel("Select deck:"))
+        deck_layout.addWidget(QLabel("Select deck:"))
                 
         # Create a dropdown for deck selection and add it to the layout
         self.deck_dropdown = QComboBox()
@@ -64,15 +74,26 @@ class CardTab(QWidget):
             sorted(mw.col.decks.all_names())
         )
 
-        layout.addWidget(self.deck_dropdown)
+        deck_layout.addWidget(self.deck_dropdown)
+        
+        layout.addLayout(deck_layout)
+        
+        # --------- WORD ---------------------------------
+        
+        word_layout = QVBoxLayout()
+        word_layout.setSpacing(4)
         
         # Add a label
-        layout.addWidget(QLabel("Enter word:"))
+        word_layout.addWidget(QLabel("Enter word:"))
 
         # Create text input and add it to the layout
         self.word_input = QLineEdit()
         self.word_input.setPlaceholderText("Type a word...")
-        layout.addWidget(self.word_input)
+        word_layout.addWidget(self.word_input)
+
+        layout.addLayout(word_layout)
+        
+        # ----------- STATUS ----------------------------- 
 
         # Create error label, set its style and visibility, 
         # and add it to the layout
@@ -88,10 +109,15 @@ class CardTab(QWidget):
         self.result_label.setVisible(False)
         layout.addWidget(self.result_label)
 
+        # ------------- GENERATE ---------------------------
+
         # Create generate button, connect the button click and add the button to the layout
         self.generate_button = QPushButton("Generate")
         self.generate_button.clicked.connect(self._handle_generate_clicked)
         layout.addWidget(self.generate_button)
+        
+        # Push everything upward instead of spreading it over the whole tab
+        layout.addStretch()
         
         self._load_models()
 
