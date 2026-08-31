@@ -1,15 +1,22 @@
-# Anki Cards
+# ankiweb_cards
 
-A small Python project that generates Anki flashcards from text using Gemini and downloads related images from Pexels.
+An Anki add-on that generates vocabulary cards from a word using Gemini and can attach a matching image from Pexels.
 
 ## Features
 
-- Sends content to Gemini to generate card data
-- Creates Anki cards through the Anki API
-- Downloads matching images from Pexels
-- Stores generated image assets in the local images folder
+- Adds a dockable panel to Anki
+- Lets the user select an available Gemini model
+- Lets the user choose a target deck from the current Anki collection
+- Generates a card from a word using the AI service
+- Saves Gemini and Pexels API keys through the Windows Credential Manager via `keyring`
+- Downloads a related image from Pexels when available
 
 ## Requirements
+
+- Anki desktop
+- Python dependencies from `requirements.txt`
+- A valid Gemini API key
+- A valid Pexels API key
 
 Install dependencies with:
 
@@ -19,34 +26,26 @@ pip install -r requirements.txt
 
 ## Setup
 
-1. Create a `.env` file in the project root.
-2. Add your API keys and configuration values, for example:
+1. Place this project in Anki's add-ons folder or install it as an add-on.
+2. Start Anki.
+3. Open the Tools menu and select `Create AI cards`.
+4. Click `Manage API Keys` and save both the Gemini key and the Pexels key.
+5. Select a deck and AI model, enter a word, and click `Generate`.
 
-```env
-ANKI_URL=http://localhost:8765
-ANKI_DECK=YourDeckName
-PEXELS_API_KEY=your_pexels_key
-GEMINI_API_KEY=your_gemini_key
-```
+## How it works
 
-In the Anki add-on UI, the "Manage API Keys" dialog now includes fields for both the Gemini API key and the image bank API key.
+- The add-on is initialized from `__init__.py` and `menu_setup.py`.
+- `app_factory.py` wires the services, controllers, and adapters together.
+- `CardTab` provides the dockable Anki UI.
+- `GeminiAIAdapter` calls the Gemini API to generate vocabulary content.
+- `PexelImageAdapter` calls the Pexels API for related images.
+- `CredentialAdapter` stores credentials in the Windows Credential Manager using `keyring`.
 
-## Run
+## Project structure
 
-```bash
-python main.py
-```
-
-## Anki Add-on UI
-
-In Anki, use the Tools menu item to open the `ankiweb_cards` dockable tab.
-It currently provides placeholder input fields for the word, languages, deck name, and model name.
-The tab does not run the card-generation workflow yet.
-
-## Project Files
-
-- `main.py` - entry point for the workflow
-- `gemini_prompts.py` - Gemini prompt generation
-- `gemini_output.py` - response schema for generated card data
-- `anki_requests.py` - Anki API integration
-- `pexels_requests.py` - image search and download logic
+- `ui/` - Anki UI panels and dialogs
+- `controller/` - request handling and UI controller logic
+- `application/` - services, ports, DTOs, and config
+- `infrastructure/` - API adapters for Gemini, Pexels, Anki, and credentials
+- `__init__.py` - Anki add-on entry point
+- `app_factory.py` - dependency wiring for the add-on
