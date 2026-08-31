@@ -1,6 +1,4 @@
 requests
 pydantic
-python-dotenv
 google-genai
-pytest
 keyring
